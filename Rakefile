@@ -5,10 +5,10 @@ require 'date'
 
 GEM = "gvideo"
 GEM_VERSION = "0.0.1"
-AUTHOR = "Your Name"
-EMAIL = "Your Email"
-HOMEPAGE = "http://example.com"
-SUMMARY = "A gem that provides..."
+AUTHOR = "Matt Aimonetti"
+EMAIL = "mattaimonetti@gmail.com"
+HOMEPAGE = "http://railsontherun.com"
+SUMMARY = "A gem that provides access to a google user's videos"
 
 spec = Gem::Specification.new do |s|
   s.name = GEM
