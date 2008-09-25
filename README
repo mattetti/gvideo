@@ -10,7 +10,7 @@ Usage:
     
     require 'rubygems'
     require 'gvideo'
-    user = Gvideo::User.new("005148908335059515423")
+    user = Gvideo::User.new("A005148908335059515423")
     videos = user.fetch_videos
     videos.first.embed_player
     
@@ -27,3 +27,6 @@ Video methods and attributes:
 * embed_player (html snippet with the google video player)
 
 Check lib/gvideo.rb for more 
+
+You can find a user's id by using firebug and inspect the call made to "see more videos from a user"
+I don't know a better way at the moment

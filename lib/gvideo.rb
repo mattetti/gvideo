@@ -4,13 +4,12 @@ require 'open-uri'
 
 # Retrieve the videos associated to a user (limited to 100 videos)
 #
-# The user id can be found by clicking on
 # Usage example
 # 005148908335059515423
 # user = Gvideo::User.new("005148908335059515423")
 # videos = user.fetch_videos
 #
-# You can find a user's id by using firebug and inspect the call made to see more videos from a user
+# You can find a user's id by using firebug and inspect the call made to "see more videos from a user"
 #
 # $Gvideo_verbose = true # set this constant to true in your app to see some debugging output
 
