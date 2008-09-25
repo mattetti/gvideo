@@ -2,3 +2,28 @@ gvideo
 ======
 
 A gem that provides access to a google users' videos
+
+$ gem sources -a http://gems.github.com (you only have to do this once)
+$ sudo gem install mattetti-gvideo
+
+Usage:
+    
+    require 'rubygems'
+    require 'gvideo'
+    user = Gvideo::User.new("005148908335059515423")
+    videos = user.fetch_videos
+    videos.first.embed_player
+    
+
+Video methods and attributes:
+---
+
+* docid (google video id)
+* title (title of the video)
+* video_url (google video url to watch the video)
+* duration (duration of the video in seconds)
+* duration_in_minutes (duration video in minutes)
+* thumbnail_url (url of the thumbnail representing the video)
+* embed_player (html snippet with the google video player)
+
+Check lib/gvideo.rb for more 
