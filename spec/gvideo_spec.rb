@@ -61,6 +61,12 @@ describe "Gvideo testing against real API" do
       # videos.length.should < @user.fetch_videos.length
     end
     
+    it "should be able to retrieve a user video using a docid" do
+      video = @user.fetch_video("6977350643295106940")
+      video.should_not be_nil
+      video.length.should == 1
+    end
+    
   end
   
   describe "Gvideo::Video" do

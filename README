@@ -22,7 +22,12 @@ or use conditions
 
    user.fetch_videos(:title => "Durex: The Garden").first
    videos = user.fetch_videos(:title => /Durex/)
+   videos = user.fetch_videos(:duration => 120)
+   videos = user.fetch_videos(:duration => 60..360)
     
+or finally just retrieve a video by using the docid
+  
+    user.fetch_video("6977350643295106940")
 
 Video methods and attributes:
 ---

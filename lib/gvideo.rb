@@ -83,11 +83,17 @@ module Gvideo
       # if video_count > 100 get all the videos using a higher cursor
       0.upto((video_count/100.to_f).ceil - 1) do |cursor| 
         p "fetching videos with cursor: #{cursor}" if $Gvideo_verbose
+        # let's not loop through more pages if we already found the document we are looking for
+        return videos if (conditions[:docid] && videos.length > 0)
         cursor = (cursor * 100) if cursor > 0 
-        videos << extract_video_elements_from_raw_data(video_raw_data(cursor), cursor, conditions)
+        videos << extract_video_elements_from_raw_data(video_raw_data(cursor), cursor, conditions).compact
       end
       
       videos.flatten
+    end
+    
+    def fetch_video(docid)
+      fetch_videos(:docid => docid.to_s)
     end
     
     # returns the amount of videos uploaded by the user
@@ -119,6 +125,9 @@ module Gvideo
       video_url           = element['url']
       duration_in_minutes = element.at("div.vli-metadata span.vlim-duration").inner_text
       
+      if conditions.has_key?(:docid)
+        return if conditions[:docid].is_a?(String) && conditions[:docid] != docid
+      end
       if conditions.has_key?(:title)
         return if conditions[:title].is_a?(String) && conditions[:title] != title
         return if conditions[:title].is_a?(Regexp) && title.match(conditions[:title]).nil?
