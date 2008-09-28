@@ -5,8 +5,8 @@ require 'open-uri'
 # Retrieve the videos associated to a user (limited to 100 videos)
 #
 # Usage example
-# 005148908335059515423
-# user = Gvideo::User.new("005148908335059515423")
+# A005148908335059515423
+# user = Gvideo::User.new("A005148908335059515423")
 # videos = user.fetch_videos
 #
 # You can find a user's id by using firebug and inspect the call made to "see more videos from a user"
@@ -69,15 +69,22 @@ module Gvideo
       @video_count = nil
     end
     
+    
     # returns an array of videos
-    def fetch_videos
+    #
+    # pass a hash of conditions
+    # available conditions can only target
+    # the title or the duration of a video
+    #
+    # ---
+    # @api public
+    def fetch_videos(conditions = {})
       videos = []
-      
       # if video_count > 100 get all the videos using a higher cursor
       0.upto((video_count/100.to_f).ceil - 1) do |cursor| 
         p "fetching videos with cursor: #{cursor}" if $Gvideo_verbose
         cursor = (cursor * 100) if cursor > 0 
-        videos << extract_video_elements_from_raw_data(video_raw_data(cursor), cursor)
+        videos << extract_video_elements_from_raw_data(video_raw_data(cursor), cursor, conditions)
       end
       
       videos.flatten
@@ -102,14 +109,24 @@ module Gvideo
     #
     # creates a video instance using the scrapped data
     #
-    def extract_video(element)
+    # ---
+    # @api private
+    def extract_video(element, conditions)
       docid               = element['docid']
-      duration            = element['dur']
+      duration            = element['dur'].to_i
       title               = element.at("div.vli-metadata span.vlim-title a")['title']
       thumbnail_url       = element.at("span.vli-thumbnail a img")['src']
       video_url           = element['url']
       duration_in_minutes = element.at("div.vli-metadata span.vlim-duration").inner_text
       
+      if conditions.has_key?(:title)
+        return if conditions[:title].is_a?(String) && conditions[:title] != title
+        return if conditions[:title].is_a?(Regexp) && title.match(conditions[:title]).nil?
+      end
+      if conditions.has_key?(:duration)
+        return if conditions[:duration].is_a?(Integer) && conditions[:duration] != duration
+        return if conditions[:duration].is_a?(Range) && !conditions[:duration].include?(duration)
+      end
       Video.new( {  :docid                => docid,
                     :duration             => duration,
                     :title                => title,
@@ -122,12 +139,12 @@ module Gvideo
     #
     # extract video elements from a raw video data and returns an array of Gvideo::Video objects
     #
-    def extract_video_elements_from_raw_data(video_raw_data, cursor=0)
+    def extract_video_elements_from_raw_data(video_raw_data, cursor=0, conditions={})
       videos = []
       video_raw_data(cursor).search("div.video-list-item").each do |element|
-        videos << extract_video(element)
+        videos << extract_video(element, conditions)
       end
-      videos
+      videos.compact
     end
     
     #

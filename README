@@ -8,11 +8,20 @@ $ sudo gem install mattetti-gvideo
 
 Usage:
     
-    require 'rubygems'
+    begin 
+      require 'minigems'
+    rescue LoadError 
+      require 'rubygems'
+    end
     require 'gvideo'
     user = Gvideo::User.new("A005148908335059515423")
     videos = user.fetch_videos
     videos.first.embed_player
+    
+or use conditions
+
+   user.fetch_videos(:title => "Durex: The Garden").first
+   videos = user.fetch_videos(:title => /Durex/)
     
 
 Video methods and attributes:
@@ -29,4 +38,4 @@ Video methods and attributes:
 Check lib/gvideo.rb for more 
 
 You can find a user's id by using firebug and inspect the call made to "see more videos from a user"
-I don't know a better way at the moment
+You can also click on one of the videos available from the "see more videos from a user" and click on one of the videos. The url will contain the user id.

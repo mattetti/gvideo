@@ -34,6 +34,33 @@ describe "Gvideo testing against real API" do
       videos.map{|v| v.docid}.uniq.size.should == videos.size
     end
     
+    it "should be able to retrieve videos with a simple text condition" do
+      video = @user.fetch_videos(:title => "Durex: The Garden")
+      video.should_not be_nil
+      video.length.should == 1
+    end
+    
+    it "should be able to retrieve videos with a regexp title condition" do
+      video = @user.fetch_videos(:title => /Durex: The Garden/)
+      video.should_not be_nil
+      video.length.should == 1
+    end
+    
+    it "should be able to retrieve videos with a strict duration condition" do
+      video = @user.fetch_videos(:duration => 12)
+      video.should_not be_nil
+      # might fail is more videos get added by the user
+      video.length.should == 2
+    end
+    
+    it "should be able to retrieve videos with a duration range condition" do
+      videos = @user.fetch_videos(:duration => 400..450)
+      videos.should_not be_nil
+      # might fail is more videos get added by the user
+      videos.length.should == 1
+      # videos.length.should < @user.fetch_videos.length
+    end
+    
   end
   
   describe "Gvideo::Video" do
