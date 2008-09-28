@@ -4,7 +4,7 @@ require 'rubygems/specification'
 require 'date'
 
 GEM = "gvideo"
-GEM_VERSION = "0.0.1"
+GEM_VERSION = "0.1.0"
 AUTHOR = "Matt Aimonetti"
 EMAIL = "mattaimonetti@gmail.com"
 HOMEPAGE = "http://railsontherun.com"
